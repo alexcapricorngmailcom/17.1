@@ -34,10 +34,18 @@
 //   .cupit();
 
 const objectShop = {
-    user: '',
     money: 10000,
     cart: [],
     discount: .13,
+
+    user: {
+        firstname: 'James',
+        lastname: 'Hetfield',
+        email: 'jameshetfield@icloud.com',
+        age: new Date('1985.01.03'),
+        INN: 1034567812
+    },
+
 
     goods: [
         {
@@ -94,7 +102,29 @@ const objectShop = {
             category: 'Алкоголь', 
             name: 'Glenfiddich 12', 
             price: 40
+        },
+
+        {
+            id: 'alk1', 
+            category: 'Алкоголь', 
+            name: 'Glenfiddich 12', 
+            price: 40
+        },
+
+        {
+            id: 'alk2', 
+            category: 'Алкоголь', 
+            name: 'Jack Daniels', 
+            price: 25
+        }, 
+
+        {
+            id: 'alk3', 
+            category: 'Алкоголь', 
+            name: 'Pubst Blue Ribbon', 
+            price: 5
         }
+
     ],
     
     showList: function(category) {
@@ -160,6 +190,7 @@ const objectShop = {
     },
 
     cupit() {
+        this.ageCheck();
         this.calcDiscount();
 
         let infoList = this.cart.map(function(el) {
@@ -185,7 +216,7 @@ const objectShop = {
 
             if (check >= 0) {
                 this.money = this.money - summ;
-                this.clearCart();
+                // this.clearCart();
                 console.log(`Списание денег со счета прошло успешно! На вашем счету: $${this.roundTo(this.money)}`);
             } else {
                 console.log (`На вашем счету недостаточно денег! Стоимость товаров превышает ваш счет на $${this.roundTo(Math.abs(check))}`);
@@ -230,12 +261,25 @@ const objectShop = {
                 good.price = that.roundTo(price);
             }
         });
+    },
+
+    ageCheck() {
+        let currentDate = new Date();
+        let temp = currentDate - this.user.age;
+        let userAge = new Date(temp).getFullYear() - new Date(0).getFullYear();
+    
+        if (userAge < 18) {
+            alert(`${this.user.firstname} ${this.user.lastname}, Вам не исполнилось 18, алкогольные напитки будут удалены из корзины`);
+            this.cart = this.cart.filter(function(el){
+                if (el.category != 'Алкоголь')
+                return el;
+            });
+        }
     }
 };
 
-objectShop.user = prompt('Добрый день, представьтесь пожалуйста :)') || 'Сеньор(-ита)';
-console.log('Привет ' + objectShop.user + '!');
+alert(`Привет, ${objectShop.user.firstname} ${objectShop.user.lastname}!`);
 
 objectShop.showList();
-objectShop.addToCart('1tgy').addToCart('xcds').addToCart('xcds').addToCart('xcds').addToCart('xcds').addToCart('IVAN').addToCart('zg82');
+objectShop.addToCart('1tgy').addToCart('xcds').addToCart('xcds').addToCart('xcds').addToCart('xcds').addToCart('IVAN').addToCart('zg82').addToCart('alk1').addToCart('alk2').addToCart('alk3');
 objectShop.showCart().cupit();
